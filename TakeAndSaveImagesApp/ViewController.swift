@@ -18,12 +18,32 @@ UINavigationControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        pickedImageView.backgroundColor = UIColor.blue
+        setupUi()
+        
     }
 
     @IBAction func btnOpenCamera(_ sender: UIButton) {
         
         openCamera()
+    }
+    
+    let photoCollectionView = PhotoCollectionView()
+    
+    func setupUi() {
+        
+        photoCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        pickedImageView.backgroundColor = UIColor.blue
+        
+        view.addSubview(photoCollectionView)
+        
+        photoCollectionView.topAnchor.constraint(equalTo: pickedImageView.bottomAnchor).isActive = true
+        photoCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        
+        photoCollectionView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        photoCollectionView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+
+
+
     }
     
     @objc private func openCamera() {
@@ -64,4 +84,44 @@ UINavigationControllerDelegate {
         
     }
 }
+
+class PhotoCollectionView: BaseUIView {
+    
+    var imagesCollection: UICollectionView = {
+        
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.backgroundColor = UIColor.green
+        
+        cv.translatesAutoresizingMaskIntoConstraints = false
+
+        return cv
+    }()
+    
+    override func setupViews() {
+        
+        addSubview(imagesCollection)
+        
+        imagesCollection.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        imagesCollection.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
+        imagesCollection.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+    }
+}
+
+class BaseUIView: UIView {
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupViews()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setupViews() {}
+}
+
+
 
